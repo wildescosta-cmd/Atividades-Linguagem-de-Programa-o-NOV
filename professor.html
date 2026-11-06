@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel do professor</title>
+<link rel="stylesheet" href="style.css"></head>
+<body><main>
+<h1>Painel do professor</h1>
+<button id="entrar">Entrar com Google</button>
+<p id="msg" class="mut"></p>
+<div id="painel" hidden>
+<label for="filtro">Filtrar por turma</label><input id="filtro" placeholder="Deixe vazio para ver todas">
+<button id="csv">Baixar CSV</button>
+<div id="lista" class="card"></div>
+</div>
+</main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+import { B } from "./conteudo.js";
+
+// Inicializa o Firebase apenas uma vez fora dos eventos de clique
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+let dados = [];
+
+function desenhar() {
+ const f = $("filtro").value.trim().toLowerCase(), L = $("lista");
+ L.textContent = "";
+ const v = dados.filter(d => !f || (d.turma || "").toLowerCase().includes(f))
+  .sort((a, b) => (a.nome || "").localeCompare(b.nome || ""));
+ const h = document.createElement("h2");
+ h.textContent = v.length + " aluno(s)";
+ L.append(h);
+ v.forEach(d => {
+  const r = d.r || {}, dt = document.createElement("details"), s = document.createElement("summary");
+  s.textContent = (d.nome || "(sem nome)") + " — " + (d.turma || "sem turma") + " — " + Object.keys(r).length + " resposta(s)";
+  dt.append(s);
+  B.forEach((b, i) => b.q.forEach((q, j) => {
+   const a = r["b" + (i + 1) + "q" + (j + 1)];
+   if (!a) return;
+   const w = document.createElement("div");
+   w.className = "resp";
+   const bq = document.createElement("b");
+   bq.textContent = "B" + (i + 1) + "." + (j + 1) + " " + q;
+   const p = document.createElement("p");
+   p.textContent = a;
+   w.append(bq, p);
+   dt.append(w);
+  }));
+  L.append(dt);
+ });
+}
+
+$("filtro").oninput = desenhar;
+
+$("csv").onclick = () => {
+ const cab = ["nome", "turma", "atualizado"];
+ B.forEach((b, i) => b.q.forEach((q, j) => cab.push("B" + (i + 1) + "." + (j + 1))));
+ const esc = x => '"' + String(x || "").replace(/"/g, '""') + '"';
+ const linhas = [cab.map(esc).join(",")];
+ dados.forEach(d => {
+  const r = d.r || {}, l = [d.nome, d.turma, d.em];
+  B.forEach((b, i) => b.q.forEach((q, j) => l.push(r["b" + (i + 1) + "q" + (j + 1)])));
+  linhas.push(l.map(esc).join(","));
+ });
+ const a = document.createElement("a");
+ a.href = URL.createObjectURL(new Blob(["\ufeff" + linhas.join("\n")], { type: "text/csv;charset=utf-8" }));
+ a.download = "respostas-apostila-c.csv";
+ a.click();
+};
+
+$("entrar").onclick = async () => {
+ try {
+  const provider = new GoogleAuthProvider();
+  await signInWithPopup(auth, provider);
+
+  onSnapshot(
+   collection(db, "respostas"),
+   snapshot => {
+    dados = snapshot.docs.map(doc => doc.data());
+    $("painel").hidden = false;
+    $("entrar").hidden = true;
+    $("msg").textContent = "";
+    desenhar();
+   },
+   error => {
+    console.error(error);
+    $("msg").textContent = "Esta conta não tem permissão para ver as respostas.";
+   }
+  );
+ } catch (error) {
+  console.error(error);
+  $("msg").textContent = "Não foi possível entrar. Tente de novo.";
+ }
+};
+</script>
+</body>
+</html>

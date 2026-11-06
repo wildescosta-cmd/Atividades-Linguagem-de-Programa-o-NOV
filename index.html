@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apostila de C — Verifique o que entendeu</title>
+<link rel="stylesheet" href="style.css"></head>
+<body><main>
+<h1>Apostila de Atividades Práticas de C</h1>
+<p class="mut">Leia o texto de cada bloco, responda com suas palavras e clique em Salvar bloco. Depois pratique no seu editor de C.</p>
+<p id="msg" class="card" hidden></p>
+<div class="card">
+<label for="nome">Nome completo</label><input id="nome" autocomplete="name">
+<label for="turma">Turma</label><input id="turma">
+</div>
+<div id="blocos"></div>
+<p class="mut"><a href="professor.html" style="color:var(--ac)">Acesso do professor</a></p>
+</main>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,signInAnonymously} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {firebaseConfig} from "./firebase-config.js";
+import {B} from "./conteudo.js";
+const $=id=>document.getElementById(id);
+const msg=t=>{$("msg").textContent=t;$("msg").hidden=false};
+let ref=null,R={};
+const box=$("blocos");
+B.forEach((b,i)=>{
+ const c=document.createElement("section");c.className="card";
+ const h=document.createElement("h2");h.textContent=b.t;
+ const p=document.createElement("p");p.className="teo";p.textContent=b.x;
+ c.append(h,p);
+ b.q.forEach((q,j)=>{
+  const k="b"+(i+1)+"q"+(j+1);
+  const l=document.createElement("label");l.textContent=(j+1)+". "+q;l.htmlFor=k;
+  const t=document.createElement("textarea");t.id=k;
+  c.append(l,t);
+ });
+ const bt=document.createElement("button");bt.textContent="Salvar bloco";
+ const st=document.createElement("span");st.className="st";
+ bt.onclick=()=>save(st);
+ c.append(bt,st);box.append(c);
+});
+async function save(st){
+ if(!ref){msg("Conexão indisponível. Recarregue a página.");return}
+ if(!$("nome").value.trim()){st.textContent="Preencha seu nome antes de salvar.";return}
+ const r={};
+ document.querySelectorAll("textarea").forEach(t=>{if(t.value.trim())r[t.id]=t.value});
+ try{
+  await setDoc(ref,{nome:$("nome").value.trim(),turma:$("turma").value.trim(),r,em:new Date().toISOString()});
+  st.textContent="Salvo.";setTimeout(()=>st.textContent="",2500);
+ }catch(e){st.textContent="Não foi possível salvar. Tente de novo."}
+}
+try{
+ const app=initializeApp(firebaseConfig);
+ const cred=await signInAnonymously(getAuth(app));
+ ref=doc(getFirestore(app),"respostas",cred.user.uid);
+ const s=await getDoc(ref);
+ if(s.exists()){const v=s.data();R=v.r||{};$("nome").value=v.nome||"";$("turma").value=v.turma||"";
+  document.querySelectorAll("textarea").forEach(t=>{t.value=R[t.id]||""})}
+}catch(e){msg("Não foi possível conectar ao banco de dados. Avise o professor.")}
+</script></body></html>
