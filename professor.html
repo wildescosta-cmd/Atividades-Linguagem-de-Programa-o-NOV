@@ -1,8 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Painel do professor</title>
-<link rel="stylesheet" href="style.css"></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel do professor</title>
+  <style>
+    /* Estilização do Título principal */
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--fg);
+      margin: 0.5em 0 1em 0;
+      letter-spacing: -0.02em;
+    }
+
+    /* Estilização específica do Botão "Entrar com Google" */
+    #entrar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: var(--ac);
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    #entrar:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    #entrar:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
 <body><main>
 <h1>Painel do professor</h1>
 <button id="entrar">Entrar com Google</button>
