@@ -1,16 +1,143 @@
-:root{--bg:#f6f7f5;--fg:#1c1f1d;--card:#fff;--mut:#5f6661;--ac:#0b7a6b;--bd:#d9dedb}
-@media (prefers-color-scheme:dark){:root{--bg:#141716;--fg:#e8ecea;--card:#1e2220;--mut:#9aa39e;--ac:#3fc1ae;--bd:#343a37}}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:760px;margin:0 auto;padding:20px 16px 60px}
-h1{font-size:1.5rem;margin:.2em 0}h2{font-size:1.15rem;margin:0 0 .4em}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px;margin:16px 0}
-.mut{color:var(--mut);font-size:.92rem}
-.teo{border-left:3px solid var(--ac);padding-left:12px;margin:.6em 0 1em}
-label{display:block;font-weight:600;margin:.9em 0 .3em}
-textarea,input{width:100%;box-sizing:border-box;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:8px}
-textarea{min-height:70px;resize:vertical}
-:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
-button{font:inherit;background:var(--ac);color:#fff;border:0;border-radius:6px;padding:8px 16px;margin:12px 8px 0 0;cursor:pointer}
-.st{font-size:.9rem;color:var(--ac)}
-details{border-top:1px solid var(--bd);padding:8px 0}summary{cursor:pointer;font-weight:600}
-.resp{margin:.4em 0 .8em}.resp b{display:block}.resp p{margin:.1em 0;white-space:pre-wrap}
+/* ==========================================
+   1. VARIÁVEIS DE TEMA (LIGHT & DARK)
+   ========================================== */
+:root {
+  --bg: #f6f7f5;
+  --fg: #1c1f1d;
+  --card: #fff;
+  --mut: #5f6661;
+  --ac: #0b7a6b;
+  --bd: #d9dedb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141716;
+    --fg: #e8ecea;
+    --card: #1e2220;
+    --mut: #9aa39e;
+    --ac: #3fc1ae;
+    --bd: #343a37;
+  }
+}
+
+/* ==========================================
+   2. ESTRUTURA GERAL E LAYOUT
+   ========================================== */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+
+/* ==========================================
+   3. TIPOGRAFIA E COMPONENTES DE TEXTO
+   ========================================== */
+h1 {
+  font-size: 1.5rem;
+  margin: .2em 0;
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 0 0 .4em;
+}
+
+.mut {
+  color: var(--mut);
+  font-size: .92rem;
+}
+
+.st {
+  font-size: .9rem;
+  color: var(--ac);
+}
+
+.teo {
+  border-left: 3px solid var(--ac);
+  padding-left: 12px;
+  margin: .6em 0 1em;
+}
+
+/* ==========================================
+   4. FORMULÁRIOS E INPUTS
+   ========================================== */
+label {
+  display: block;
+  font-weight: 600;
+  margin: .9em 0 .3em;
+}
+
+textarea,
+input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  background: var(--ac);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 16px;
+  margin: 12px 8px 0 0;
+  cursor: pointer;
+}
+
+/* ==========================================
+   5. CARTÕES E ACCORDIONS (DETAILS)
+   ========================================== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+details {
+  border-top: 1px solid var(--bd);
+  padding: 8px 0;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.resp {
+  margin: .4em 0 .8em;
+}
+
+.resp b {
+  display: block;
+}
+
+.resp p {
+  margin: .1em 0;
+  white-space: pre-wrap;
+}
